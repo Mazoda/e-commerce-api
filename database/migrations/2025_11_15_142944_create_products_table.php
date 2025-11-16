@@ -16,10 +16,10 @@ return new class extends Migration {
             $table->id();
             $table->string('title');
             $table->text('slug');
-            $table->text('description');
-            $table->float('price');
-            $table->foreignId('category_id')->references('categories')->constrained()->cascadeOnDelete();
-            $table->foreignId('brand_id')->references('brands');
+            $table->longText('description');
+            $table->integer('price');
+            $table->foreignId('category_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('brand_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
 
