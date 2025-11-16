@@ -17,8 +17,13 @@ class ProductResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'sub_title' => $this->sub_title,
-            'description' => $this->description
+            'slug' => $this->slug,
+            'description' => $this->description,
+            'price' => $this->price,
+            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
+            'updated_at' => $this->created_at->format('Y-m-d H:i:s'),
+            'brand' => BrandResource::make($this->brand),
+            'category' => CategoryResource::make($this->category)
         ];
     }
 }
