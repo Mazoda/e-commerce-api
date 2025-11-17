@@ -15,19 +15,18 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with(['category', 'brand'])->simplePaginate(10);
+        return
 
-        return response()->json([
-            'error' => null,
-            'status' => 200,
-            'data' => ProductResource::collection($products),
-            'pagination' => [
-                'current_page' => $products->currentPage(),
-                'per_page' => $products->perPage(),
-                'next_page_url' => $products->nextPageUrl(),
-                'prev_page_url' => $products->previousPageUrl(),
-            ]
-        ], 200);
+
+            ProductResource::collection(Product::simplePaginate(10));
+
+        // 'pagination' => [
+        //     'current_page' => $products->currentPage(),
+        //     'per_page' => $products->perPage(),
+        //     'next_page_url' => $products->nextPageUrl(),
+        //     'prev_page_url' => $products->previousPageUrl(),
+        // ]
+
     }
 
     /**
