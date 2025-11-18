@@ -13,13 +13,11 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasApiTokens;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
-    protected $guarded = ['remember_token', 'email_verified_at'];
+    protected $guarded = [
+        'id',
+        'remember_token',
 
+    ];
     /**
      * The attributes that should be hidden for serialization.
      *

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
+use App\Http\Resources\ProductResource;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -15,15 +16,15 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::get();
-        return response()->json(
-            [
-                'data' => CategoryResource::collection($categories)
-            ],
-            200
-        );
-    }
 
+        return CategoryResource::collection(Category::get());
+
+    }
+    public function products(Category $category)
+    {
+        $products = $category->products()->simplePaginate();
+        return ProductResource::collection($products);
+    }
     /**
      * Store a newly created resource in storage.
      */
@@ -33,40 +34,28 @@ class CategoryController extends Controller
             'title' => 'required|string|min:3'
         ]);
         $data['slug'] = Str::slug($request->title);
-        Category::create($data);
-        return $data;
+        return CategoryResource::make(Category::create($data));
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Category $category)
     {
-        $category = Category::findOrFail($id);
-        return response()->json(
-            [
-                'data' => CategoryResource::make($category)
-            ],
-            200
-        );
+
+        return CategoryResource::make($category);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Category $category)
     {
         $validated = $request->validate([
             'title' => 'required|string|min:3'
         ]);
-
-        Category::update($validated);
-        return response()->json(
-            [
-                'data' => CategoryResource::make($validated)
-            ],
-            200
-        );
+        $validated['slug'] = Str::slug($validated['title']);
+        return CategoryResource::make($category->update($validated));
     }
 
     /**
@@ -74,6 +63,7 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
+        Category::destroy($id);
         return response()->noContent();
     }
 }
